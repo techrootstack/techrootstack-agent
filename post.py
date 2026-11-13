@@ -19,7 +19,7 @@ def env(k, req=True):
     return v
 
 def captions():
-    txt = open(f"{ROOT}/content/captions.md", encoding="utf-8").read()
+    txt = open(f"{ROOT}/captions.md", encoding="utf-8").read()
     out = {}
     for m in re.finditer(r"^## (\S+)\n(.+?)(?=\n## |\Z)", txt, re.S | re.M):
         out[m.group(1)] = m.group(2).strip()
@@ -42,9 +42,9 @@ def wait_ready(cid, token):
 
 def post_carousel(name, caption):
     uid, token, base = env("IG_USER_ID"), env("IG_ACCESS_TOKEN"), env("PUBLIC_BASE_URL")
-    slides = sorted(glob.glob(f"{ROOT}/content/carousels/{name}/slide_*.jpg"))
+    slides = sorted(glob.glob(f"{ROOT}/{name}__slide_*.jpg"))
     if not 2 <= len(slides) <= 10: raise RuntimeError(f"{name}: need 2-10 slides, found {len(slides)}")
-    urls = [f"{base}/content/carousels/{name}/{os.path.basename(s)}" for s in slides]
+    urls = [f"{base}/{os.path.basename(s)}" for s in slides]
     if DRY:
         print(f"[DRY RUN] would post {name} with {len(urls)} slides\n  first: {urls[0]}\n  caption: {caption[:80]}...")
         return "dry-run"
